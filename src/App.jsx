@@ -4,7 +4,7 @@ import Table from "./pages/Table.jsx";
 
 function App() {
   return (
-      <Router>
+      <Router basename={'/table'}>
         <Routes>
           <Route path="/" element={<Login/>}/>
           <Route path="table" element={<Table/>}/>
