@@ -2,6 +2,7 @@
   "name": "table",
   "private": true,
   "version": "0.0.0",
+  "homepage": "http://myusername.github.io/my-app",
   "type": "module",
   "scripts": {
     "dev": "vite",
