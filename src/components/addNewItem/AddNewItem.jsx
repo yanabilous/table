@@ -28,11 +28,7 @@ function AddNewItem() {
 
       if (response.ok) {
         setIsSuccess(true);
-
-        // Очищаємо поля форми
         setFormData(initialFormData);
-
-        // Приховуємо повідомлення про успіх через 2 секунди
         setTimeout(() => {
           setIsSuccess(false);
         }, 2000);
