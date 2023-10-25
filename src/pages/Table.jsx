@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TableItem from "../components/tableItem/TableItem.jsx";
 import AddNewItem from "../components/addNewItem/AddNewItem.jsx";
 
@@ -12,7 +12,8 @@ function Table() {
   });
   const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearch = () => {
+
+  const searchWithFilters = () => {
     const queryParams = new URLSearchParams(searchFilters);
 
     fetch(`https://technical-task-api.icapgroupgmbh.com/api/table/?${queryParams}`, {
@@ -31,11 +32,10 @@ function Table() {
       });
   };
 
-  const handleFilterChange = (event, filterKey) => {
-    const updatedFilters = { ...searchFilters };
-    updatedFilters[filterKey] = event.target.value;
-    setSearchFilters(updatedFilters);
-  };
+
+useEffect(() => {
+    searchWithFilters();
+  }, [searchFilters]);
 
   return (
     <div className="table">
@@ -47,7 +47,7 @@ function Table() {
               type="text"
               placeholder="Name"
               value={searchFilters.name}
-              onChange={(e) => handleFilterChange(e, "name")}
+              onChange={(e) => setSearchFilters({ ...searchFilters, name: e.target.value })}
             />
           </p>
           <p>
@@ -55,7 +55,7 @@ function Table() {
               type="text"
               placeholder="Birthday Date"
               value={searchFilters.birthday_date}
-              onChange={(e) => handleFilterChange(e, "birthday_date")}
+              onChange={(e) => setSearchFilters({ ...searchFilters, birthday_date: e.target.value })}
             />
           </p>
           <p>
@@ -63,7 +63,7 @@ function Table() {
               type="text"
               placeholder="Email"
               value={searchFilters.email}
-              onChange={(e) => handleFilterChange(e, "email")}
+              onChange={(e) => setSearchFilters({ ...searchFilters, email: e.target.value })}
             />
           </p>
           <p>
@@ -71,7 +71,7 @@ function Table() {
               type="text"
               placeholder="Phone Number"
               value={searchFilters.phone_number}
-              onChange={(e) => handleFilterChange(e, "phone_number")}
+              onChange={(e) => setSearchFilters({ ...searchFilters, phone_number: e.target.value })}
             />
           </p>
           <p>
@@ -79,10 +79,10 @@ function Table() {
               type="text"
               placeholder="Address"
               value={searchFilters.address}
-              onChange={(e) => handleFilterChange(e, "address")}
+              onChange={(e) => setSearchFilters({ ...searchFilters, address: e.target.value })}
             />
           </p>
-          <button onClick={handleSearch}>Search</button>
+          {/*<button onClick={searchWithFilters}>Search</button>*/}
         </div>
         <div>
           <TableItem results={searchResults} />
