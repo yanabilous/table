@@ -1,37 +1,9 @@
-import  { useState, useEffect } from "react";
-import "./tableItem.scss";
+import  { useState } from "react";
+import "./tableList.scss";
 import PropTypes from "prop-types";
 
-function TableItem({ results }) {
+function TableList({ results, currentPage, totalPages, setCurrentPage }) {
   const [data, setData] = useState({ results: [] });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`https://technical-task-api.icapgroupgmbh.com/api/table/?limit=10&offset=${(currentPage - 1) * 10}`, {
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "testuser",
-          },
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          setData(result);
-          setTotalPages(Math.ceil(result.count / 10));
-        } else {
-          console.error("Failed to fetch data");
-        }
-      } catch (error) {
-        console.error("Error while fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [currentPage]);
 
   const handleInputChange = (event, id, key) => {
     const updatedData = data.results.map((item) => {
@@ -124,7 +96,7 @@ function TableItem({ results }) {
 
   return (
     <div className="item_container">
-      {results.map((item) => (
+      {results && results.map((item) => (
         <div key={item.id}>
           <input
             className="id"
@@ -196,9 +168,8 @@ function TableItem({ results }) {
         </button>
         {Array.from({ length: totalPages }, (_, index) => (
           (index + 1 === currentPage || index + 1 === currentPage - 1 || index + 1 === currentPage + 1) ? (
-            <button key={index} onClick={() => goToPage(index + 1)}>{index + 1}</button>
-          ) : null
-          )
+            <button className={currentPage===index+1?'active':''} key={index} onClick={() => goToPage(index + 1)}>{index + 1}</button>
+          ) : null)
         )}
         <button onClick={goToNextPage} disabled={currentPage === totalPages}>
           ...
@@ -209,9 +180,12 @@ function TableItem({ results }) {
 }
 
 
-TableItem.propTypes = {
+TableList.propTypes = {
   results: PropTypes.array.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  setCurrentPage: PropTypes.func.isRequired,
 };
 
 
-export default TableItem;
+export default TableList;
