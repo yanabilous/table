@@ -42,6 +42,7 @@ useEffect(() => {
       <div className="table_left">
         <h1>Table</h1>
         <div className="table_header">
+          <h4>Filters:</h4>
           <p>
             <input
               type="text"
