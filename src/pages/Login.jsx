@@ -11,11 +11,25 @@ function Login() {
   const [showStatus, setShowStatus] = useState(false);
   const navigate = useNavigate();
 
+
   const onSubmit = async (data) => {
-    setLoading(true);
+  setLoading(true);
 
+  try {
+    const response = await fetch('https://technical-task-api.icapgroupgmbh.com/api/login/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'testuser',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: data.username,
+        password: data.password
+      })
+    });
 
-    if (data.username === "testuser" && data.password === "testpassword123") {
+    if (response.ok) {
       setShowStatus(true);
       setTimeout(() => {
         setShowStatus(false);
@@ -23,12 +37,14 @@ function Login() {
       }, 2000);
       setLoginStatus("success");
     } else {
-
       setLoginStatus("error");
     }
+  } catch (error) {
+    setLoginStatus("error");
+  }
 
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
   return (
     <div className="wrapper_login">
@@ -46,6 +62,8 @@ function Login() {
             <div>
               <input
                 {...field}
+                 minLength={1}
+                maxLength={150}
                 placeholder="Username"
                 className={`email_input ${errors.username ? "input-error" : ""}`}
               />
@@ -65,6 +83,8 @@ function Login() {
               <div>
                 <input
                   {...field}
+                  minLength={1}
+                  maxLength={128}
                   className={`input_pass ${errors.password ? "input-error" : ""}`}
                   type={isPasswordVisible ? "text" : "password"}
                   placeholder="Password"
